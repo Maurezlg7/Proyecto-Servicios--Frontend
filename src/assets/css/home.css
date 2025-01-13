@@ -1,0 +1,64 @@
+.body-Home {
+  width: 100%;
+  height: 90vh;
+  overflow-y: auto;
+}
+.body-Home .msj-bienvenida {
+  width: 100%;
+  height: 40%;
+  background-color: aqua;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.body-Home .title_services {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body-Home ul {
+  width: 100%;
+  height: 80%;
+  display: grid;
+  grid-template-columns: 1000px;
+  grid-template-rows: 200px !important;
+  justify-content: center;
+  list-style: none;
+  gap: 25px;
+}
+.body-Home ul li {
+  background-color: aliceblue;
+  width: 1000px;
+  height: 200px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.body-Home ul li span {
+  font-size: 45px;
+  margin-left: 7px;
+}
+.body-Home ul li div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 7px;
+}
+.body-Home ul li div button {
+  width: 70px;
+  height: 70px;
+  margin: 0 10px;
+}
+.body-Home ul li div button svg {
+  width: 50px;
+  height: 50px;
+}
+
+/*# sourceMappingURL=home.css.map */
