@@ -1,0 +1,39 @@
+.body_login {
+  width: 100%;
+  height: 100vh;
+  background-color: bisque;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body_login form {
+  width: 450px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: aquamarine;
+}
+.body_login form h1 {
+  margin-bottom: 10px;
+}
+.body_login form input {
+  width: 300px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+.body_login form label {
+  width: 300px;
+  text-align: left;
+}
+.body_login form button {
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+}
+.body_login form .link {
+  margin-top: 10px;
+}
+
+/*# sourceMappingURL=login.css.map */
