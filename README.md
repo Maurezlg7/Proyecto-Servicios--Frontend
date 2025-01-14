@@ -1,3 +1,16 @@
-# Trabajo-Final-Servicios - FRONTEND
+#FRONTEND - LOGIN & REGISTER.
 
-Frontend del projecto de servicios, echo por Mauro Leonel Gomez.
+-- Creacion del login y register.
+
+Tiempo estimado: 2 Días.
+
+Nota: El .gitignore esta configurado para no subir archivos como el dist, .vscode, node_modules, etc.
+
+comando para verificar que archivos y carpetas ignora: 
+
+_ git init
+_ git status --ignored
+
+Dependencias necesarias:
+
+npm install react-router-dom react-hook-form
