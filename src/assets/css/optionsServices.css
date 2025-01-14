@@ -1,0 +1,31 @@
+.body-options {
+  width: 100%;
+  height: 90vh;
+  background-color: rgb(2, 125, 84);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body-options ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.body-options ul li {
+  width: 700px;
+  height: 150px;
+  margin: 50px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body-options ul li button {
+  background-color: azure;
+  width: 700px;
+  height: 150px;
+  font-size: 40px;
+}
+
+/*# sourceMappingURL=optionsServices.css.map */

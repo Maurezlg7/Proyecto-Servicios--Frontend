@@ -1,0 +1,58 @@
+.body-SP {
+  width: 100%;
+  height: 90vh;
+  background-color: cadetblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+.body-SP .search-input {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body-SP .search-input .body-search {
+  width: 1000px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.body-SP .search-input .body-search input {
+  width: 95%;
+  height: 100%;
+  padding-left: 5px;
+  font-size: 20px;
+}
+.body-SP .search-input .body-search button {
+  width: 5%;
+  height: 100%;
+}
+.body-SP .search-input .body-search button svg {
+  width: 20px;
+  height: 20px;
+}
+.body-SP ul {
+  width: 100%;
+  height: 80%;
+  display: grid;
+  grid-template-columns: 600px 600px;
+  grid-template-rows: 200px !important;
+  justify-content: center;
+  list-style: none;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+.body-SP ul li {
+  background-color: aliceblue;
+  width: 600px;
+  height: 200px;
+  border: 2px solid black;
+}
+
+/*# sourceMappingURL=searchProducts.css.map */
