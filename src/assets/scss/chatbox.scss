@@ -1,5 +1,92 @@
-.body_CB{
+.body_CB {
     width: 100%;
     height: 90vh;
-    background-color: gold;
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  
+    .Chat {
+      height: 90%;
+      width: 100%;
+      background-color: rgb(26, 100, 76);
+      padding: 7px;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+  
+      ul {
+        width: 100% !important;
+        height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 0 auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        list-style: none;
+        li {
+          max-width: 70%;
+          padding: 10px;
+          border-radius: 15px;
+          font-size: 14px;
+          line-height: 1.4;
+          display: flex;
+  
+          &.other {
+            align-self: flex-start;
+            background-color: #e1e1e1;
+            border-top-left-radius: 5px;
+            border-bottom-right-radius: 15px;
+          }
+  
+          &.user {
+            align-self: flex-end;
+            background-color: #0078d7;
+            color: white;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 15px;
+          }
+        }
+      }
+    }
+  
+    .input_chat {
+      width: 100%;
+      height: 10%;
+      background-color: antiquewhite;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      .body_chatbox{
+        width: 1200px;
+        height: 50px;
+        background-color: #0078d7;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        input{
+            width: 1150px;
+            height: 50px;
+            padding-left: 7px;
+        }
+        button{
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            svg{
+                width: 30px;
+                height: 30px;
+            }
+        }
+      }
+    }
+  }
+  
