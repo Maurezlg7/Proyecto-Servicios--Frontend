@@ -1,8 +1,9 @@
-const AuthService = async (formData, API_URL, endpoint) => {
+const AuthService = async (formData, API_URL, endpoint, method) => {
     try {
-        const url = `${API_URL}/${endpoint}`;
+        const url = `${API_URL}${endpoint}`;
+        console.log("URL: " + url);
         const response = await fetch(url, {
-            method: "POST",
+            method: method,
             headers: {
                 "Content-Type": "application/json",
             },

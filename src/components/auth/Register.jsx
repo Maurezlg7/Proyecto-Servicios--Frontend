@@ -9,8 +9,11 @@ function Register() {
         nombre: "",
         apellido: "",
         email: "",
-        username: "",
+        telefono: "",
         password: "",
+        role_id: 1,
+        domicilio_laboral: "",
+        domicilio_particular: ""
     });
 
     const handleChange = (e) => {
@@ -24,10 +27,13 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!formData) {
-            return
+            return;
         }
-        //AuthService(formData,"URL","endpoint o tu ruta");
+        console.log("Data: " + formData);
+        console.log("Ruta: " + import.meta.env.VITE_API_URL)
+        AuthService(formData, `${import.meta.env.VITE_API_URL}`, "usuario/", "POST");
     };
+    
 
     return (
         <div className="body_register">
@@ -69,12 +75,12 @@ function Register() {
                 />
 
                 <FormInput
-                    label="Nombre de Usuario:"
+                    label="Telefono:"
                     type="text"
-                    name="username"
-                    value={formData.username}
+                    name="telefono"
+                    value={formData.telefono}
                     onChange={handleChange}
-                    placeholder="Introduce tu nombre de usuario"
+                    placeholder="Introduce tu numero de telefono"
                     className="formInput"
                     required
                 />
@@ -86,6 +92,40 @@ function Register() {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Introduce tu contraseña"
+                    className="formInput"
+                    required
+                />
+                
+                <label htmlFor="rol_id">Rol:</label>
+                <select
+                    name="rol_id"
+                    value={formData.role_id}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                <FormInput
+                    label="Domicilio laboral:"
+                    type="text"
+                    name="domicilio_laboral"
+                    value={formData.domicilio_laboral}
+                    onChange={handleChange}
+                    placeholder="Introduce la direccion de tu trabajo"
+                    className="formInput"
+                    required
+                />
+
+                <FormInput
+                    label="Domicilio particular:"
+                    type="text"
+                    name="domicilio_particular"
+                    value={formData.domicilio_particular}
+                    onChange={handleChange}
+                    placeholder="Introduce tu dirección de casa"
                     className="formInput"
                     required
                 />
