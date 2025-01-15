@@ -1,24 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import FormInput from "../shared/formInput";
 import "../../assets/css/login.css";
 import AuthService from "../../services/AuthService";
-import { useAuth } from "../../contexts/AuthContext";
-
-import { useNavigate } from "react-router-dom";
 
 function Login() {
-    const [formData, setformData] = useState({
+    const [formData, setFormData] = useState({
         email: "",
         password: "",
-        token: import.meta.env.VITE_APP_TEST_TOKEN,
     });
+    const [error, setError] = useState(null);
+
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setformData({
+        setFormData({
             ...formData,
             [name]: value,
         });
@@ -28,27 +28,42 @@ function Login() {
         e.preventDefault();
     
         if (!formData.email || !formData.password) {
-            console.error("Por favor, completa todos los campos");
+            setError("Por favor, completa todos los campos.");
             return;
         }
     
-        const expectedEmail = import.meta.env.VITE_TEST_USER_EMAIL;
-        const expectedPassword = import.meta.env.VITE_TEST_USER_PASSWORD;  
-        const token = import.meta.env.VITE_APP_TEST_TOKEN;
+        try {
+            const response = await AuthService(
+                {
+                    email: formData.email,
+                    clave: formData.password,
+                },
+                import.meta.env.VITE_API_URL,
+                "/auth/login",
+                "POST"
+            );
     
-        if (formData.email === expectedEmail && formData.password === expectedPassword) {
-            login(formData.token, formData);
-            navigate("/profile");
-        } else {
-            console.error("Credenciales incorrectas");
+            if (response.status === 201) {
+                const data = await response.json();
+                login(data.token, { email: formData.email });
+                const redirectTo = location.state?.from || '/profile';
+                navigate(redirectTo);
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || "Error al iniciar sesión.");
+            }
+        } catch (error) {
+            setError("Credenciales incorrectas o error en el servidor.");
+            console.error("Error al iniciar sesión:", error);
         }
     };
-    
 
     return (
         <div className="body_login">
             <form onSubmit={handleSubmit}>
                 <h1>INGRESO</h1>
+
+                {error && <p className="error">{error}</p>}
 
                 <FormInput
                     label="Correo Electrónico:"
@@ -57,7 +72,6 @@ function Login() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Introduce tu correo"
-                    className=""
                     required
                 />
 

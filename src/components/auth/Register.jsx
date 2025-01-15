@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../shared/formInput";
 import '../../assets/css/register.css';
 import AuthService from "../../services/AuthService";
 
 function Register() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         nombre: "",
         apellido: "",
@@ -26,14 +28,14 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formData) {
+        
+        if (Object.values(formData).includes("")) {
+            console.log("Por favor, completa todos los campos.");
             return;
         }
-        console.log("Data: " + formData);
-        console.log("Ruta: " + import.meta.env.VITE_API_URL)
-        AuthService(formData, `${import.meta.env.VITE_API_URL}`, "usuario/", "POST");
+        AuthService(formData, import.meta.env.VITE_API_URL, "/usuario", 'POST');
+        navigate("/login");
     };
-    
 
     return (
         <div className="body_register">
