@@ -45,7 +45,7 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (Object.values(formData).includes("")) {
             setError("Por favor, completa todos los campos.");
             return;
@@ -127,7 +127,7 @@ function Register() {
                     className="formInput"
                     required
                 />
-                
+
                 <label htmlFor="rol_id">Rol:</label>
                 <select
                     name="rol_id"
