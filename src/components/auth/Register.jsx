@@ -18,30 +18,60 @@ function Register() {
         domicilio_particular: ""
     });
 
+    const [error, setError] = useState(null);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value,
         });
+        setError(null);
     };
 
-    const handleSubmit = (e) => {
+    const checkEmailExists = async (email) => {
+        try {
+            const response = await fetch(`https://api.fsalva157.dev/api/usuario/getByEmail/${email}`);
+            if (response.status === 200) {
+                const data = await response.json();
+                return !!data.email;
+            }
+            return false;
+        } catch (error) {
+            console.error("Error verificando el email:", error);
+            return false;
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         if (Object.values(formData).includes("")) {
-            console.log("Por favor, completa todos los campos.");
+            setError("Por favor, completa todos los campos.");
             return;
         }
-        AuthService(formData, import.meta.env.VITE_API_URL, "/usuario", 'POST');
-        navigate("/login");
+
+        const emailExists = await checkEmailExists(formData.email);
+        if (emailExists) {
+            setError("El correo electrónico ya está registrado. Por favor, utiliza otro.");
+            return;
+        }
+
+        try {
+            await AuthService(formData, import.meta.env.VITE_API_URL, "/usuario", 'POST');
+            navigate("/login");
+        } catch (error) {
+            console.error("Error durante el registro:", error);
+            setError("Hubo un error al registrar. Por favor, inténtalo de nuevo.");
+        }
     };
 
     return (
         <div className="body_register">
             <form onSubmit={handleSubmit}>
-
                 <h1>REGISTRO</h1>
+
+                {error && <p className="error">{error}</p>}
 
                 <FormInput
                     label="Nombre:"
