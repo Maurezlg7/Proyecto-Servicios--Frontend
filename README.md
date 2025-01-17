@@ -1,27 +1,11 @@
-# Proyecto de Gestión de Usuarios
+## Descripción del Proyecto
 
-## Changelog
+    1. Se integraron las partes del backend con el frontend para una comunicación fluida entre ambos.
 
-### 2025-01-15
+    2. Se consumen los servicios creados por todos los usuarios y se presentan visualmente en el sistema.
 
-#### **Login Component**
-- **Corrección de redirección tras el inicio de sesión exitoso**:
-  - Se agregó el hook `useLocation` de `react-router-dom` para manejar la redirección a la ruta previa a la autenticación.
-  - Ahora, el componente redirige a la ruta almacenada en `location.state?.from` o, si no está disponible, a `/profile` por defecto.
-
-#### **Errores corregidos**
-- Se corrigió un error donde los usuarios eran redirigidos únicamente al perfil, ignorando la ruta previa.
-
-#### **Archivos afectados**
-- `src/components/Login.jsx`
-
-#### **Cómo probar los cambios**
-1. Navega a una ruta protegida, como `/profile`.
-2. Serás redirigido al formulario de inicio de sesión.
-3. Ingresa credenciales válidas.
-4. Tras iniciar sesión, deberías ser redirigido a `/profile`.
-
-
-#### DEPENDENCIA NUEVA:
-
-**npm install jwt-decode**
+    3. Cada servicio muestra su información y especificaciones detalladas, facilitando la comprensión del propósito de cada uno.
+    
+    4. Se implementaron funcionalidades de autenticación, incluyendo login y logout, conectados al backend.
+    
+    5. Existe una sección dedicada a los servicios creados por el usuario autenticado, donde se pueden visualizar, gestionar y eliminar sus propios servicios.
