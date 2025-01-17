@@ -1,67 +1,119 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import FormInput from "./shared/formInput";
-import '../assets/css/login.css';
+import AuthService from "../services/AuthService";
+import "../assets/css/createservice.css";
+import { useNavigate } from "react-router-dom";
 
-export default function CreateService(){
-    const [formData, setformData] = useState({
-        title: "",
+export default function CreateService() {
+    const { email } = useAuth();
+    const { submitForm, fetchOne } = AuthService();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        usuario_id: "",
+        titulo: "",
         descripcion: "",
-        category: "",
+        categoria_id: 1,
+        duracion: "",
+        horario: "",
+        estado: true,
     });
+    const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setformData({
+        setFormData({
             ...formData,
             [name]: value,
         });
+        setError(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (!formData.title || !formData.descripcion) {
-            console.error("Por favor, completa todos los campos");
+        if (!formData.titulo || !formData.descripcion || !formData.duracion || !formData.horario) {
+            setError("Por favor, completa todos los campos.");
             return;
-        }else{
-            console.log("Servicio creado.");
+        }
+
+        const response = await fetchOne(`usuario/getByEmail/${email}`);
+        const userID = response.id_usuario;
+
+        const finalData = {
+            ...formData,
+            usuario_id: userID,
+        };
+
+        try {
+            await submitForm("servicios", finalData);
+            setSuccessMessage("Servicio creado correctamente.");
+            setError(null);
+
+            setFormData({
+                usuario_id: "",
+                titulo: "",
+                descripcion: "",
+                categoria_id: 1,
+                duracion: "",
+                horario: "",
+                estado: true,
+            });
+
+            navigate("/acumulated_services")
+        } catch (error) {
+            console.error("Error al crear el servicio:", error);
+            setError("Ocurrió un error al crear el servicio. Inténtalo nuevamente.");
+            setSuccessMessage("");
         }
     };
 
-    return(
-        <div className="body_login">
+    return (
+        <div className="body_s">
             <form onSubmit={handleSubmit}>
                 <h1>CREA TU SERVICIO</h1>
+                {error && <div className="error-message">{error}</div>}
+                {successMessage && <div className="success-message">{successMessage}</div>}
+
                 <FormInput
-                        label="Titulo:"
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        placeholder="Introduce tu correo"
-                        className=""
-                        required
+                    label="Titulo:"
+                    type="text"
+                    name="titulo"
+                    value={formData.titulo}
+                    onChange={handleChange}
+                    placeholder="Introduce el titulo"
+                    required
                 />
-                <label htmlFor="">Descripcion:</label>
-                <textarea 
-                    name="description" 
-                    placeholder="Introduce tu descripción."
+
+                <label htmlFor="descripcion">Descripcion:</label>
+                <textarea
+                    name="descripcion"
+                    placeholder="Introduce tu descripción"
                     value={formData.descripcion}
                     onChange={handleChange}
                     required
-                >
-
-                </textarea>
-                <FormInput
-                        label="Categoria:"
-                        type="select"
-                        name="category"
-                        value={formData.category}
-                        onChange={handleChange}
-                        placeholder="Introduce tu correo"
-                        className=""
-                        required
                 />
+
+                <FormInput
+                    label="Duracion:"
+                    type="text"
+                    name="duracion"
+                    value={formData.duracion}
+                    onChange={handleChange}
+                    placeholder="Introduce su duracion"
+                    required
+                />
+
+                <FormInput
+                    label="Horario:"
+                    type="text"
+                    name="horario"
+                    value={formData.horario}
+                    onChange={handleChange}
+                    placeholder="Introduce su horario"
+                    required
+                />
+
                 <button type="submit">CREAR</button>
             </form>
         </div>

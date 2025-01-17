@@ -20,3 +20,8 @@
 2. Serás redirigido al formulario de inicio de sesión.
 3. Ingresa credenciales válidas.
 4. Tras iniciar sesión, deberías ser redirigido a `/profile`.
+
+
+#### DEPENDENCIA NUEVA:
+
+**npm install jwt-decode**

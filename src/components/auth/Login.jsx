@@ -6,6 +6,7 @@ import "../../assets/css/login.css";
 import AuthService from "../../services/AuthService";
 
 function Login() {
+    const { loginUser } = AuthService();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -22,41 +23,29 @@ function Login() {
             ...formData,
             [name]: value,
         });
+        setError(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (!formData.email || !formData.password) {
             setError("Por favor, completa todos los campos.");
             return;
         }
-    
+
         try {
-            const response = await AuthService(
-                {
-                    email: formData.email,
-                    clave: formData.password,
-                },
-                import.meta.env.VITE_API_URL,
-                "/auth/login",
-                "POST"
-            );
-    
-            if (response.status === 201) {
-                const data = await response.json();
-                login(data.token, { email: formData.email });
-                const redirectTo = location.state?.from || '/profile';
-                navigate(redirectTo);
-            } else {
-                const errorData = await response.json();
-                setError(errorData.message || "Error al iniciar sesión.");
-            }
+            const data = await loginUser(formData);
+            login(data);
+            const redirectTo = location.state?.from || "/";
+            setFormData({ email: "", password: "" });
+            navigate(redirectTo);
         } catch (error) {
             setError("Credenciales incorrectas o error en el servidor.");
             console.error("Error al iniciar sesión:", error);
         }
     };
+
 
     return (
         <div className="body_login">

@@ -37,9 +37,12 @@
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            span{
-                font-size: 45px;
-                margin-left: 7px;
+            .info{
+                flex-direction: column;
+                margin-left: 14px;
+                span{
+                    font-size: 25px;
+                }
             }
             div{
                 display: flex;

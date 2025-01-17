@@ -64,7 +64,7 @@ const router = createBrowserRouter([
                 path: "create_service",
                 element: (
                     <ProtectedRoute>
-                        <CreateService />
+                        <CreateService /> 
                     </ProtectedRoute>
                 ),
             },
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: "view_product",
+                path: "view_product/:id",
                 element: <ViewProductPage />
             },
             {

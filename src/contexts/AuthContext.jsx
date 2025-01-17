@@ -1,9 +1,9 @@
-import { createContext, useContext, useReducer, useEffect, useState } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 
 const initialState = {
     isAuthenticated: false,
     token: null,
-    user: null,
+    email: null,
 };
 
 function authReducer(state, action) {
@@ -13,7 +13,7 @@ function authReducer(state, action) {
                 ...state,
                 isAuthenticated: true,
                 token: action.payload.token,
-                user: action.payload.user,
+                email: action.payload.email
             };
         case "LOGOUT":
             return initialState;
@@ -25,29 +25,37 @@ function authReducer(state, action) {
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const initializeState = () => {
+        const token = localStorage.getItem("token");
+        const email = localStorage.getItem("email");
+        return {
+            isAuthenticated: !!token,
+            token: token || null,
+            email: email || null,
+        };
+    };
 
-    const [state, dispatch] = useReducer(authReducer, {
-        isAuthenticated: !!storedToken,
-        token: storedToken,
-        user: storedUser,
-    });
+    const [state, dispatch] = useReducer(authReducer, {}, initializeState);
 
     useEffect(() => {
         if (state.token) {
             localStorage.setItem("token", state.token);
-            localStorage.setItem("user", JSON.stringify(state.user));
+            localStorage.setItem("email", state.email || "");
+            localStorage.setItem("userId", state.userId || "");
         }
-    }, [state.token, state.user]);
+    }, [state.token, state.email, state.userId]);
 
-    const login = (token, user) => {
-        dispatch({ type: "LOGIN", payload: { token, user } });
+    const login = (userData) => {
+        const { token, email, userId } = userData;
+        dispatch({
+            type: "LOGIN",
+            payload: { token, email, userId },
+        });
     };
 
     const logout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        localStorage.removeItem("email");
         dispatch({ type: "LOGOUT" });
     };
 

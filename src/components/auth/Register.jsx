@@ -5,7 +5,10 @@ import '../../assets/css/register.css';
 import AuthService from "../../services/AuthService";
 
 function Register() {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const { fetchOne, submitForm } = AuthService();
 
     const [formData, setFormData] = useState({
         nombre: "",
@@ -15,54 +18,45 @@ function Register() {
         password: "",
         role_id: 1,
         domicilio_laboral: "",
-        domicilio_particular: ""
+        domicilio_particular: "",
     });
-
-    const [error, setError] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-        setError(null);
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: name === "role_id" ? parseInt(value) : value.toString(),
+        }));
     };
 
-    const checkEmailExists = async (email) => {
-        try {
-            const response = await fetch(`https://api.fsalva157.dev/api/usuario/getByEmail/${email}`);
-            if (response.status === 200) {
-                const data = await response.json();
-                return !!data.email;
+    const validateForm = () => {
+        Object.entries(formData).forEach(([key, value]) => {
+            if (typeof value === "string" && value.trim() === "") {
+                throw new Error(`El campo ${key} no puede estar vacío.`);
             }
-            return false;
-        } catch (error) {
-            console.error("Error verificando el email:", error);
-            return false;
-        }
+            if (key === "role_id" && (isNaN(value) || value === "")) {
+                throw new Error(`El campo ${key} debe ser un número válido.`);
+            }
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (Object.values(formData).includes("")) {
-            setError("Por favor, completa todos los campos.");
-            return;
-        }
-
-        const emailExists = await checkEmailExists(formData.email);
-        if (emailExists) {
-            setError("El correo electrónico ya está registrado. Por favor, utiliza otro.");
-            return;
-        }
-
         try {
-            await AuthService(formData, import.meta.env.VITE_API_URL, "/usuario", 'POST');
+            validateForm();
+
+            const emailExists = await fetchOne("usuario/getByEmail", formData.email);
+
+            if (emailExists) {
+                setError("El correo electrónico ya está registrado. Por favor, utiliza otro.");
+                return;
+            }
+            await submitForm("usuario", formData);
             navigate("/login");
         } catch (error) {
             console.error("Error durante el registro:", error);
-            setError("Hubo un error al registrar. Por favor, inténtalo de nuevo.");
+            setError(error.message || "Hubo un error al registrar. Por favor, inténtalo de nuevo.");
         }
     };
 
@@ -130,14 +124,14 @@ function Register() {
 
                 <label htmlFor="rol_id">Rol:</label>
                 <select
-                    name="rol_id"
+                    name="role_id"
                     value={formData.role_id}
                     onChange={handleChange}
                     required
                 >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option value="1">Oferente</option>
+                    <option value="2">Buscador</option>
+                    <option value="3">Ambos</option>
                 </select>
 
                 <FormInput
