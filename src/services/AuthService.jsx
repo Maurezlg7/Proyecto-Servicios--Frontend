@@ -1,7 +1,6 @@
 import { useAuth } from "../contexts/AuthContext";
 
 function AuthService() {
-    const { email } = useAuth();
     const API_BASE_URL = import.meta.env.VITE_API_URL;
 
     const fetchAll = async (endpoint) => {
@@ -16,9 +15,9 @@ function AuthService() {
         }
     }
 
-    const fetchOne = async (url) => {
+    const fetchOne = async (endpoint) => {
         try {
-            const response = await fetch(`${API_BASE_URL}${url}`);
+            const response = await fetch(`${API_BASE_URL}${endpoint}`);
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
@@ -51,44 +50,47 @@ function AuthService() {
         }
     };
 
-    const removeItem = async (endpoint, element) => {
-        try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}${element}`, {
-                method: 'DELETE',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(element),
-            });
-            if (!response.ok) {
-                throw new Error("Error en la solicitud: " + response.statusText);
-            }
-            return response;
-        } catch (error) {
-            console.error("Error: " + error);
-            throw error;
+    const removeItem = async (endpoint, id, token) => {
+        const url = `${API_BASE_URL}${endpoint}${id}`;
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
         }
+    
+        return await response.json();
     };
     
-    const modifyItem = async (endpoint, element, formData) => {
+    const modifyItem = async (endpoint, id, formData) => {
         try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}/${element}`, {
+            const response = await fetch(`${API_BASE_URL}${endpoint}${id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData),
             });
+    
             if (!response.ok) {
-                throw new Error("Error en la solicitud: " + response.statusText);
+                const errorDetails = await response.json().catch(() => null);
+                const errorMessage = errorDetails?.message || response.statusText || "Error desconocido";
+                throw new Error(`Error en la solicitud: ${errorMessage}`);
             }
-            console.log(response);
-            return response;
+    
+            const data = await response.json();
+            console.log("Respuesta del servidor:", data);
+            return data;
         } catch (error) {
-            console.error("Error: " + error);
+            console.error("Error:", error.message);
             throw error;
         }
-    };
+    };    
     
 
     const loginUser = async (element) => {

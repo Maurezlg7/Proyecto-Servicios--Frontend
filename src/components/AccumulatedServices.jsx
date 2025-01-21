@@ -6,43 +6,33 @@ import '../assets/css/accumulatedservices.css';
 import '../assets/css/ratingSystem.css';
 
 export default function AccumulatedServices() {
-    const { removeItem } = AuthService();
+    const { removeItem, fetchAll, fetchOne } = AuthService();
     const [elements, setElements] = useState([]);
     const [usuarioId, setUsuarioId] = useState(null);
-    const { email } = useAuth();
+    const { email, token } = useAuth();
 
     const callingServices = async (userId) => {
         try {
-            const response = await fetch("https://api.fsalva157.dev/api/servicios");
-            if (response.ok) {
-                const data = await response.json();
-                const filteredServices = data.filter(service => service.usuario_id === userId);
-                setElements(filteredServices);
-            } else {
-                console.error("Error en la respuesta del servidor:", response.status);
-            }
-        } catch (error) {
+            const data = await fetchAll('servicios/');
+            const filteredServices = data.filter(service => service.usuario_id === userId);
+            setElements(filteredServices);
+        }catch (error) {
             console.error("Error obteniendo servicios:", error);
         }
     };
-    
+
     const getUserIdByEmail = async (email) => {
         try {
-            const response = await fetch(`https://api.fsalva157.dev/api/usuario/getByEmail/${email}`);
-            if (response.ok) {
-                const data = await response.json();
-                callingServices(data.id_usuario);
-            } else {
-                console.error("Error en la respuesta del servidor:", response.status);
-            }
-        } catch (error) {
-            console.error("Error obteniendo el usuario:", error);
+            const data = await fetchOne(`usuario/getByEmail/${email}`);
+            callingServices(data.id_usuario);
+        }catch (error) {
+            console.error("Error obteniendo servicios:", error);
         }
-    };    
+    };
 
     const onDelete = async (id) => {
         try {
-            await removeItem("servicios/", id);
+            await removeItem("servicios/", id, token);
             setElements((prev) => prev.filter((element) => element.id_servicio !== id));
         } catch (error) {
             console.error("Error eliminando el servicio:", error);
@@ -61,7 +51,6 @@ export default function AccumulatedServices() {
             callingServices(usuarioId);
         }
     }, [usuarioId]);
-
 
     return (
         <div className="body-AS">
@@ -93,8 +82,8 @@ export default function AccumulatedServices() {
                             <span>{element.titulo}</span>
                             <div>
                                 <button>
-                                    <Link>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                    <Link to={`/edit_service/${element.id_servicio}`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
                                             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
                                             <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
                                         </svg>

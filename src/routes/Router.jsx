@@ -14,6 +14,7 @@ import ServiceRequestsPage from '../pages/ServiceRequestsPage';
 import RatingSystem from '../components/RatingSystem';
 import ViewProductPage from '../pages/ViewProductPage';
 import ChatBoxPage from '../pages/ChatBoxPage';
+import EditServicePage from '../pages/EditServicePage';
 
 const router = createBrowserRouter([
     {
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <RatingSystem />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "edit_service/:id",
+                element: (
+                    <ProtectedRoute>
+                        <EditServicePage />
                     </ProtectedRoute>
                 ),
             },
