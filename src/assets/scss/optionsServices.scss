@@ -18,11 +18,36 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            button{
+            .op{
                 background-color: azure;
                 width: 700px;
                 height: 150px;
+                border-radius: 25px;
                 font-size: 40px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                text-decoration: none;
+                color: black;
+                .icon{
+                    width: 150px;
+                    height: 150px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    svg{
+                        width: 100px;
+                        height: 90px;
+                    }
+                }
+                span{
+                    width: 700px;
+                    height: 150px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
         }
     }

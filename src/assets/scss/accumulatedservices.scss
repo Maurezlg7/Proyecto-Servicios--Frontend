@@ -54,9 +54,10 @@
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            border-radius: 25px;
             span{
                 font-size: 45px;
-                margin-left: 7px;
+                margin-left: 14px;
             }
             div{
                 display: flex;
@@ -68,12 +69,81 @@
                     width: 70px;
                     height: 70px;
                     margin: 0 10px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: wheat;
                     svg{
                         width: 50px;
                         height: 50px;
+                        color: black;
                     }
                 }
             }
         }
+    }
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    button {
+        margin: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:first-child {
+        background-color: #ff4d4f;
+        color: #fff;
+    }
+
+    button:last-child {
+        background-color: #ddd;
+        color: #333;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+}
+
+
+.not_found{
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: cadetblue;
+    color: white;
+    svg{
+        width: 400px;
+        height: 400px;
+    }
+    h1{
+        font-size: 50px;
     }
 }
