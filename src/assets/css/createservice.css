@@ -27,5 +27,22 @@
   width: 100px;
   height: 40px;
 }
-
+.back-button {
+  position: absolute;
+  top: 150px;
+  left: 50px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: blue;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+.back-button svg {
+  width: 50%;
+  height: 50%;
+}
 /*# sourceMappingURL=createservice.css.map */

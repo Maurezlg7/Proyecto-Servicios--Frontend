@@ -23,11 +23,10 @@ export default function CreateService() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-        setError(null);
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: name === "categoria_id" ? parseInt(value) : value.toString(),
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -54,7 +53,7 @@ export default function CreateService() {
                 usuario_id: "",
                 titulo: "",
                 descripcion: "",
-                categoria_id: 1,
+                categoria_id: "",
                 duracion: "",
                 horario: "",
                 estado: true,
@@ -93,6 +92,22 @@ export default function CreateService() {
                     onChange={handleChange}
                     required
                 />
+
+                <label htmlFor="categoria_id">Categoria:</label>
+                <select
+                    name="categoria_id"
+                    value={formData.categoria_id}
+                    onChange={handleChange}
+                    required>
+                    <option value="">Selecciona una categoria</option>
+                    <option value="1">Limpieza</option>
+                    <option value="2">Jardineria</option>
+                    <option value="3">Plomería</option>
+                    <option value="4">Peluquería</option>
+                    <option value="5">tecnologia</option>
+                    <option value="6">Salud y Bienestar</option>
+                    </select>
+            
 
                 <FormInput
                     label="Duracion:"

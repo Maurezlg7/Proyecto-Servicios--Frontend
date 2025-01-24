@@ -5,7 +5,7 @@ import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import Profile from '../components/Profile';
 import ProtectedRoute from './ProtectedRoutes';
-import SearchProductsPage from '../pages/SearchProductsPage';
+import BuscarServiciosPage from '../pages/BuscarServiciosPage';
 import OptionsServicesPage from '../pages/optionsServicesPage';
 import MessagingHistoryPage from '../pages/messasingHistoryPage';
 import AcumulatedServicesPage from '../pages/AcumulatedServicesPage';
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "search_products",
-                element: <SearchProductsPage />
+                element: <BuscarServiciosPage />
             },
             {
                 path: "options_services",
