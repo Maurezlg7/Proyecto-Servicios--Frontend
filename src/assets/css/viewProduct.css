@@ -40,4 +40,44 @@
   text-align: center;
 }
 
+.popup-content_view{
+  width: 400px;
+  height: 500px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.popup-content_view .btn-close{
+  width: 30px;
+  height: 30px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  top: 200px;
+  left: 1150px;
+}
+
+textarea {
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+}
+
+.btn_send{
+  width: 150px;
+  height: 40px;
+}
 /*# sourceMappingURL=viewProduct.css.map */
