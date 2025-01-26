@@ -1,9 +1,9 @@
 ## Descripción del Proyecto
 Este proyecto incluye modificaciones y mejoras en el diseño web de las siguientes secciones:
-- **Register**: Pantalla de registro de sesión.
-- **Editar Servicios**: Edición de servicios acumulados.
-- **Busqueda de Servicios - Categorias**: Página para guiarte mediante categorias y buscar servicios deseados.
-- **Inicio - Home**: Página principal del sitio web.
+- **Navbar**: Creamos un nuevo ícono de Favoritos.
+- **SearchProduct**: Cambios en el diseño (visualización del servicio dentro de la categoría seleccionada).
+- **FavoriteServives**: Página para guadar los servicios de interés visualizarlos o eliminarlos.
+- **Inicio - Home**: Modificamos botones y sus funcionalidades.
 
 ### Estructura de Archivos
 
@@ -12,21 +12,21 @@ Contiene los estilos CSS específicos para cada componente del proyecto:
 
 assets/
 ├── css/
-│   ├── register.css
-│   ├── searchProducts.css
-│   ├── editservice.css
-│   ├── home.css
+│   ├── Navbar.css
+│   ├── FavoriteServices.css
+│   ├── searchProduct.css
+│   ├── Home.css
 
 
 #### components/
 Incluye los componentes JSX desarrollados y modificados:
 
 components/
-├── BuscarServicios.jsx
-├── Register.jsx
-├── EditService.jsx
-└── Home.jsx
+├── Home.jsx
+├── Router.jsx
+├── Navbar.jsx
+
 
 
 ### Créditos
-- **Maria Claudia Fabían** : Responsable de la modificación de archivos css mencionados y de archivos JSX mencionados.
+- **Ana Gomez** : Responsable de la modificación de archivos css mencionados y de archivos JSX mencionados.

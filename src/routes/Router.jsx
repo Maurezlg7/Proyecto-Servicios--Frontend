@@ -13,6 +13,7 @@ import CreateService from '../components/CreateService';
 import ServiceRequestsPage from '../pages/ServiceRequestsPage';
 import ViewProductPage from '../pages/ViewProductPage';
 import EditServicePage from '../pages/EditServicePage';
+import FavoriteServicesPage from '../pages/FavoriteServicesPage';
 
 const router = createBrowserRouter([
     {
@@ -48,6 +49,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <MessagingHistoryPage />    
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "favorite_services",
+                element: (
+                    <ProtectedRoute>
+                        <FavoriteServicesPage />    
                     </ProtectedRoute>
                 ),
             },
