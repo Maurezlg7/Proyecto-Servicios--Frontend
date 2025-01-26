@@ -1,43 +1,115 @@
 .body-product {
   width: 100%;
-  height: 150vh;
+  height: 100vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: rgb(2,0,36);
+  background: linear-gradient(142deg, rgba(2,0,36,1) 0%, rgba(221,214,254,1) 0%, rgba(237,233,254,1) 100%);
 }
 .body-product .info_product {
   width: 100%;
   height: 50%;
-  background-color: aqua;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 .body-product .info_product div {
-  margin: 0 50px;
+  margin: 0 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-}
-.body-product .info_product .Image {
+  border-radius: 10px;
+  box-shadow: 2px 4px 2px black;
   width: 500px;
-  height: 500px;
-  background-color: rgb(211, 74, 74);
+  height: 600px;
+  background-color: #8b5cf6 ; 
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; 
+  color: white;
+}
+.body-product .info_product .Image svg{
+  width: 400px;
+  height: 400px;
+  color: white;
 }
 .body-product .info_product .Description {
-  width: 500px;
-  height: 500px;
-  background-color: rgb(211, 74, 74);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: rgb(84, 84, 84);
 }
-.body-product .comentary {
-  width: 100%;
-  height: 50%;
-  background-color: olive;
-  text-align: center;
+
+.Description h1{
+  font-size: 32px;
+  margin: 25px 0;
+}
+
+.Description p{
+  width: 80%;
+  font-size: 25px;
+  font-family: monospace;
+  margin: 7px 0;
+  text-align: justify;
+}
+
+.Description span{
+  width: 80%;
+  font-size: 20px;
+  font-family: monospace;
+  margin: 5px 0;
+  color: black;
+  text-align: left;
+}
+
+.Description button{
+  border: none;
+  width: 100px;
+  height: 40px;
+  border-radius: 7px;
+  background-color: rgb(63, 65, 229);
+  color: white;
+  margin-bottom: 10px;
+  transition: background-color 0.7s ease;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 2px 4px 2px black;
+
+}
+
+.Description .rating{
+  display: flex;
+  flex-direction: row-reverse !important;
+  justify-content: center;
+  width: 50% !important;
+  height: 30px !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 25px 0 !important;	
+}
+
+.Description .rating input {
+  display: none;
+}
+
+.Description .rating label {
+  font-size: 3rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+}
+
+.Description .rating input:checked ~ label,
+.Description .rating label:hover,
+.Description .rating label:hover ~ label {
+  color: #3300ff;
 }
 
 .popup-content_view{
@@ -79,5 +151,6 @@ textarea {
 .btn_send{
   width: 150px;
   height: 40px;
+  background-color: rgb(53, 56, 233);
 }
 /*# sourceMappingURL=viewProduct.css.map */
