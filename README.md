@@ -1,9 +1,9 @@
 ## Descripción del Proyecto
 Este proyecto incluye modificaciones y mejoras en el diseño web de las siguientes secciones:
-- **Login**: Pantalla de inicio de sesión.
-- **Historial de Servicios**: Visualización de servicios acumulados.
-- **Crear Servicios**: Página para crear nuevos servicios.
-- **Opciones de Servicios**: Configuración y opciones relacionadas con los servicios.
+- **Register**: Pantalla de registro de sesión.
+- **Editar Servicios**: Edición de servicios acumulados.
+- **Busqueda de Servicios - Categorias**: Página para guiarte mediante categorias y buscar servicios deseados.
+- **Inicio - Home**: Página principal del sitio web.
 
 ### Estructura de Archivos
 
@@ -12,21 +12,21 @@ Contiene los estilos CSS específicos para cada componente del proyecto:
 
 assets/
 ├── css/
-│   ├── AccumulatedServices.css
-│   ├── CreatedServices.css
-│   ├── Login.css
-│   └── OptionServices.css
+│   ├── register.css
+│   ├── searchProducts.css
+│   ├── editservice.css
+│   ├── home.css
+
 
 #### components/
 Incluye los componentes JSX desarrollados y modificados:
 
 components/
-├── Navbar.jsx
-├── optionsServices.jsx
-├── AccumulatedServices.jsx
-└── ServiceRequests.jsx
+├── BuscarServicios.jsx
+├── Register.jsx
+├── EditService.jsx
+└── Home.jsx
 
 
 ### Créditos
-- **Claudia Chavarría**: Responsable de la modificación de archivos JSX mencionados.
-- **Ana Gomez** : Responsable de la modificación de archivos css mencionados.
+- **Maria Claudia Fabían** : Responsable de la modificación de archivos css mencionados y de archivos JSX mencionados.

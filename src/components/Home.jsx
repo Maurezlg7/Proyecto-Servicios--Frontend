@@ -20,8 +20,8 @@ export default function Home() {
         <>
             <div className='body-Home'>
                 <div className='msj-bienvenida'>
-                    <h1>Mensaje de Bienvenida</h1>
-                    <h3>Descripcion: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore cumque dolorum qui hic, reprehenderit sit quis recusandae at totam autem modi, asperiores, omnis provident aliquam voluptatum accusamus possimus perspiciatis iste.</h3>
+                    <h1>BIENVENIDOS</h1>
+                    <h3>A la plataforma de servicios de tu comunidad. Aquí podrás publicar tus servicios, buscar ayuda y colaborar  con tus vecinos para fortalecer nuestra red local.¡Juntos  hacemos  un barrio mas unido!.</h3>
                 </div>
                 <div className='title_services'>
                     <h2>SERVICIOS DESTACADOS</h2>
@@ -32,8 +32,13 @@ export default function Home() {
                             return (
                                 <li key={element.id_servicio}>
                                     <div className='info'>
-                                        <span>{element.titulo}</span>
-                                        <p>{element.horario}</p>
+                                        <div className="img_conteiner">
+                                            <img src="" alt="Imagen" />
+                                        </div>
+                                        <div className="data-info">
+                                            <span>{element.titulo}</span>
+                                            <p>{element.horario}</p>
+                                        </div>
                                     </div>
                                     <div>
                                         <button>

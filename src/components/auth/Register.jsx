@@ -62,32 +62,37 @@ function Register() {
 
     return (
         <div className="body_register">
+            <div className="Logo">
+                <img src="/src/assets/images/comunidad.jpg" alt="Logo" />
+            </div>
             <form onSubmit={handleSubmit}>
                 <h1>REGISTRO</h1>
 
                 {error && <p className="error">{error}</p>}
 
-                <FormInput
-                    label="Nombre:"
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    placeholder="Introduce tu nombre"
-                    className="formInput"
-                    required
-                />
+                <div className="double_data">
+                    <FormInput
+                        label="Nombre:"
+                        type="text"
+                        name="nombre"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                        placeholder="Introduce tu nombre"
+                        className="formInput"
+                        required
+                    />
 
-                <FormInput
-                    label="Apellido:"
-                    type="text"
-                    name="apellido"
-                    value={formData.apellido}
-                    onChange={handleChange}
-                    placeholder="Introduce tu apellido"
-                    className="formInput"
-                    required
-                />
+                    <FormInput
+                        label="Apellido:"
+                        type="text"
+                        name="apellido"
+                        value={formData.apellido}
+                        onChange={handleChange}
+                        placeholder="Introduce tu apellido"
+                        className="formInput"
+                        required
+                    />
+                </div>
 
                 <FormInput
                     label="Correo Electrónico:"
@@ -127,6 +132,7 @@ function Register() {
                     name="role_id"
                     value={formData.role_id}
                     onChange={handleChange}
+                    className="select_form"
                     required
                 >
                     <option value="1">Oferente</option>

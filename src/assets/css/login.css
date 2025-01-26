@@ -60,10 +60,10 @@
 
 @keyframes blink {
   0% {
-    transform: scale(1); /* tamaño normal */
+    transform: scale(1);
   }
   50% {
-      transform: scale(1.2); /* agrandado al 120% */
+      transform: scale(1.2);
   }
   100% {
       transform: scale(1);

@@ -78,7 +78,7 @@ export default function BuscarServicios() {
                     {categories.map((element, index) => (
                         <li key={element.id_categoria}>
                             <button onClick={() => callingServices(element.id_categoria)}>
-                                <h1>{element.categoria}</h1>
+                                <h1>{element.categoria.toUpperCase()}</h1>
                                 <div>{Svgs[index]}</div>
                             </button>
                         </li>
