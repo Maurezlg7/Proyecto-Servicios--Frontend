@@ -13,6 +13,7 @@ export default function OptionsServices() {
                             </svg>
                         </div>
                         <span>OFRECER/CREAR</span>
+                        <p>Aquí podras crear tus servicios.</p>
                     </Link>
                 </li>
                 <li>
@@ -25,6 +26,7 @@ export default function OptionsServices() {
                             </svg>
                         </div>
                         <span>HISTORIAL</span>
+                        <p>Podras ver el historial de tus servicios.</p>
                     </Link>
                 </li>
                 <li>
@@ -36,6 +38,7 @@ export default function OptionsServices() {
                             </svg>
                         </div>
                         <span>SOLICITUDES</span>
+                        <p>Aquí podras ver tus solicitudes.</p>
                     </Link>
                 </li>
             </ul>

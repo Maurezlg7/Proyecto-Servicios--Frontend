@@ -1,7 +1,8 @@
 .body-options {
   width: 100%;
-  height: 90vh;
-  background-color: rgb(2, 125, 84);
+  height: 100vh;
+  background: rgb(2,0,36);
+  background: linear-gradient(142deg, rgba(2,0,36,1) 0%, rgba(221,214,254,1) 0%, rgba(237,233,254,1) 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,30 +10,36 @@
 .body-options ul {
   list-style: none;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.body-options ul li {
-  width: 700px;
-  height: 150px;
-  margin: 50px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.body-options ul li .op {
-  background-color: azure;
-  width: 700px;
-  height: 150px;
-  border-radius: 25px;
-  font-size: 40px;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+.body-options ul li{
+  width: 300px;
+  height: 400px;
+  margin: 0px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: transform 0.7s ease;
+}
+.body-options ul li :hover{
+  transform: scale(1.1);
+}
+.body-options ul li .op {
+  background: #8b5cf6;
+  width: 300px;
+  height: 400px;
+  border-radius: 25px;
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
-  color: black;
+  color: white !important;
+  box-shadow: 2px 4px 2px black;
 }
 .body-options ul li .op .icon {
   width: 150px;
@@ -40,17 +47,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 }
 .body-options ul li .op .icon svg {
   width: 100px;
   height: 90px;
+  color: white;
+  transition: color 0.7s ease;
+}
+.body-options ul li .op .icon svg:hover{
+  color: tomato;
 }
 .body-options ul li .op span {
-  width: 700px;
-  height: 150px;
+  width: 90%;
+  height: 30px;
+  margin: 5px 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: bolder;
+}
+
+.body-options ul li .op p{
+  width: 90%;
+  height: 30px;
+  margin: 14px 0;
+  text-align: center;
+  font-family: sans-serif;
 }
 
 /*# sourceMappingURL=optionsServices.css.map */

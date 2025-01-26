@@ -1,7 +1,9 @@
 .body-AS {
+  padding-top: 100px;
   width: 100%;
-  height: 90vh;
-  background-color: cadetblue;
+  height: 100vh;
+  background: rgb(2,0,36);
+  background: linear-gradient(142deg, rgba(2,0,36,1) 0%, rgba(221,214,254,1) 0%, rgba(237,233,254,1) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,8 +18,8 @@
   align-items: center;
 }
 .body-AS .search-input .body-search {
-  width: 1000px;
-  height: 40px;
+  width: 1020px;
+  height: 50px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -25,64 +27,165 @@
 }
 .body-AS .search-input .body-search input {
   width: 95%;
-  height: 100%;
-  padding-left: 5px;
-  font-size: 20px;
+  height: 60px;
+  padding-left: 10px;
+  border-radius: 10px;
+  font-size: 25px;
+  box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.2);
 }
 .body-AS .search-input .body-search button {
-  width: 5%;
-  height: 100%;
+  width: 60px;
+  height: 60px;
+  margin-left: 10px;
+  background-color: #ac82ee;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.2);
+  transition:  background-color 0.5s ease;
 }
+
+.body-AS .search-input .body-search button:hover{
+  background-color: #9b75d8;
+}
+
 .body-AS .search-input .body-search button svg {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
+  color: white !important;
 }
+
 .body-AS ul {
   width: 100%;
   height: 80%;
   display: grid;
   grid-template-columns: 1000px;
-  grid-template-rows: 200px !important;
+  grid-template-rows: 400px !important;
   justify-content: center;
   list-style: none;
-  gap: 25px;
+  gap: 50px;
 }
 .body-AS ul li {
-  background-color: aliceblue;
+  background-color: white;
   width: 1000px;
-  height: 200px;
-  border: 2px solid black;
+  height: 400px;
+  box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-radius: 25px;
 }
-.body-AS ul li span {
-  font-size: 45px;
-  margin-left: 14px;
+
+.service{
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 70%;
+  height: 100%;
+  text-align: left;
+  padding: 25px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-.body-AS ul li div {
+
+.service .status-active{
+  color: rgb(132, 192, 41);
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.service h2{
+  font-size: 30px;
+  margin: 5px 0;
+  padding-left: 5px;
+}
+
+.service span{
+  margin: 5px 0;
+  padding-left: 5px;
+}
+
+.service .status-inactive{
+  color: red;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.service button{
+  width: 70px;
+  height: 70px;
+  background-color: #ac82ee;
+  border: none;
+  border-radius: 10px;
+  transition:  background-color 0.5s ease;
+  margin: 7px 5px;
+}
+
+.service button svg{
+  width: 30px;
+  height: 30px;
+}
+
+.buttons{
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  margin-right: 14px;
+  margin-bottom: 14px;
+}
+
+.Img-Preview{
+  width: 100%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Img-Preview img{
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  border-radius: 25px;
+}
+
+.buttons .btns{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 30%;
+}
+
+.buttons button{
+  width: 150px;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  transition:  background-color 0.5s ease;
+  margin: 7px 5px;
+  color: white;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  margin-right: 7px;
 }
-.body-AS ul li div button {
-  width: 70px;
-  height: 70px;
-  margin: 0 10px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: wheat;
+
+.buttons button svg{
+  width: 25px;
+  height: 25px;
 }
-.body-AS ul li div button svg {
-  width: 50px;
-  height: 50px;
-  color: black;
+
+.btn_cancel{
+  background-color: #ff4d4f;
+}
+
+.btn_accept{
+  background-color: #4caf50;
 }
 
 .popup-overlay {

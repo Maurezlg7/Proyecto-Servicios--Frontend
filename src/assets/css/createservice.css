@@ -1,23 +1,31 @@
 .body_s {
   width: 100%;
-  height: 90vh;
-  background-color: bisque;
+  height: 100vh;
+  background: rgb(2,0,36);
+  background: linear-gradient(142deg, rgba(2,0,36,1) 0%, rgba(221,214,254,1) 0%, rgba(237,233,254,1) 100%);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .body_s form {
   width: 500px;
-  height: 600px;
-  background-color: aquamarine;
+  height: 800px;
+  margin-top: 55px;
+  border-radius: 25px;
+  background: rgb(2,0,36);
+  background: linear-gradient(142deg, rgba(2,0,36,1) 0%, rgba(167,139,250,1) 0%, rgba(221,214,254,1) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  box-shadow: 2px 4px 2px black;
 }
 .body_s form label {
   width: 300px;
   text-align: left;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: bold;
 }
 .body_s form textarea {
   width: 300px;
@@ -26,23 +34,12 @@
 .body_s form button {
   width: 100px;
   height: 40px;
+  border-radius: 5px;
+  background-color:#fafafa;
 }
-.back-button {
-  position: absolute;
-  top: 150px;
-  left: 50px;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: blue;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-}
-.back-button svg {
-  width: 50%;
-  height: 50%;
+.body_s form select {
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
 }
 /*# sourceMappingURL=createservice.css.map */

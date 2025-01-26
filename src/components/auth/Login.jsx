@@ -49,6 +49,11 @@ function Login() {
 
     return (
         <div className="body_login">
+            <div className="logo">
+                
+                <img src="src\assets\images\comunidad.jpg" alt="fotodellogo" />
+
+            </div>
             <form onSubmit={handleSubmit}>
                 <h1>INGRESO</h1>
 
