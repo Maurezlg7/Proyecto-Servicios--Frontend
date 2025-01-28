@@ -1,5 +1,3 @@
-import { useAuth } from "../contexts/AuthContext";
-
 function AuthService() {
     const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -50,21 +48,26 @@ function AuthService() {
         }
     };
 
-    const removeItem = async (endpoint, id, token) => {
-        const url = `${API_BASE_URL}${endpoint}${id}`;
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+    const removeItem = async (endpoint, token) => {
+        try {
+            const response = await fetch(`https://api.fsalva157.dev/api/${endpoint}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
     
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la solicitud');
+            }
+    
+            return await response.json();
+        } catch (error) {
+            console.error("Error en la solicitud:", error.message);
+            throw error;
         }
-    
-        return await response.json();
     };
     
     const modifyItem = async (endpoint, id, formData) => {
