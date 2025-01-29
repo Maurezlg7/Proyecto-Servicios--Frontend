@@ -1,5 +1,3 @@
-import { useAuth } from "../contexts/AuthContext";
-
 function AuthService() {
     const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -50,49 +48,50 @@ function AuthService() {
         }
     };
 
-    const removeItem = async (endpoint, id, token) => {
-        const url = `${API_BASE_URL}${endpoint}${id}`;
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
-    
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-    
-        return await response.json();
-    };
-    
-    const modifyItem = async (endpoint, id, formData) => {
+    const removeItem = async (endpoint, token) => {
         try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}${id}`, {
-                method: 'PATCH',
+            const response = await fetch(`https://api.fsalva157.dev/api/${endpoint}`, {
+                method: 'DELETE',
                 headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
     
             if (!response.ok) {
-                const errorDetails = await response.json().catch(() => null);
-                const errorMessage = errorDetails?.message || response.statusText || "Error desconocido";
-                throw new Error(`Error en la solicitud: ${errorMessage}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la solicitud');
             }
     
-            const data = await response.json();
-            console.log("Respuesta del servidor:", data);
-            return data;
+            return await response.json();
         } catch (error) {
-            console.error("Error:", error.message);
+            console.error("Error en la solicitud:", error.message);
             throw error;
         }
-    };    
+    };
     
-
+    const modifyItem = async (endpoint, id, data) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}${endpoint}${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Error en la solicitud");
+            }
+    
+            return response;
+        } catch (error) {
+            console.error("Error en modifyItem:", error.message);
+            throw error;
+        }
+    };
+    
     const loginUser = async (element) => {
         try {
             const response = await fetch(`${API_BASE_URL}auth/login`, {

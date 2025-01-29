@@ -92,10 +92,17 @@
   background-color: rgb(53, 56, 233);
 }
 .body_register form select {
-  width: 300px;
-  height: 30px;
-  margin-bottom: 10px;
+  width: 350px !important;
+  height: 35px !important;
+  margin-bottom: 20px !important;
 }
+.rol_id{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 350px !important;
+}
+
 .body_register form .link {
   margin-top: 10px;
 }

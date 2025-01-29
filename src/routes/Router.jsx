@@ -14,6 +14,7 @@ import ServiceRequestsPage from '../pages/ServiceRequestsPage';
 import ViewProductPage from '../pages/ViewProductPage';
 import EditServicePage from '../pages/EditServicePage';
 import FavoriteServicesPage from '../pages/FavoriteServicesPage';
+import RequestedServicesPage from '../pages/RequestedServicesPage';
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <OptionsServicesPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "requested_services",
+                element: (
+                    <ProtectedRoute>
+                        <RequestedServicesPage />
                     </ProtectedRoute>
                 ),
             },

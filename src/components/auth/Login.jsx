@@ -51,7 +51,7 @@ function Login() {
         <div className="body_login">
             <div className="logo">
                 
-                <img src="src\assets\images\comunidad.jpeg" alt="fotodellogo" />
+                <img src="/public/Logo_LasFlores.png" alt="fotodellogo" />
 
             </div>
             <form onSubmit={handleSubmit}>

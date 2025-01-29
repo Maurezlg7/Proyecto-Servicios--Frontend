@@ -22,9 +22,8 @@ const useDebounce = (value, delay) => {
 };
 
 export default function AccumulatedServices() {
-    const [solicitudes, setSolicitudes] = useState([]);
     const [roleID, setroleID] = useState(0);
-    const { removeItem, fetchAll, fetchOne } = AuthService();
+    const { removeItem, fetchAll, fetchOne, modifyItem } = AuthService();
     const [elements, setElements] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const { email, token } = useAuth();
@@ -37,7 +36,6 @@ export default function AccumulatedServices() {
         try {
             const data = await fetchAll("servicios/");
             const filteredServices = data.filter((service) => service.usuario_id === userId);
-            const ids_servicio = filteredServices.map(service => service.id_servicio);
             setElements(filteredServices);
         } catch (error) {
             console.error("Error obteniendo servicios:", error);
@@ -60,9 +58,31 @@ export default function AccumulatedServices() {
         setServiceToDelete(serviceId);
     };
 
+    const Detener_Publicacion = async (servicio_id) => {
+        let data = {
+            estado: false,
+        }
+        try {
+            await modifyItem(`servicios/`, servicio_id, data);
+        } catch (error) {
+            console.error("Error deteniendo la publicacion del servicio:", error);
+        }
+    }
+
+    const Activar_Publicacion = async (servicio_id) => {
+        let data = {
+            estado: true,
+        }
+        try {
+            await modifyItem(`servicios/`, servicio_id, data);
+        } catch (error) {
+            console.error("Error deteniendo la publicacion del servicio:", error);
+        }
+    }
+
     const handleConfirmDelete = async () => {
         try {
-            await removeItem("servicios/", serviceToDelete, token);
+            await removeItem(`servicios/${serviceToDelete}`, token);
             setElements((prev) => prev.filter((service) => service.id_servicio !== serviceToDelete));
             setShowPopup(false);
             setServiceToDelete(null);
@@ -80,7 +100,7 @@ export default function AccumulatedServices() {
         if (email) {
             getUserIdByEmail(email);
         }
-    }, [email]);
+    });
 
     const filteredElements = elements.filter((element) =>
         element.titulo.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -115,7 +135,7 @@ export default function AccumulatedServices() {
                                 {element.estado === true ? (
                                     <span className="status-active">Activo</span>
                                 ) : element.estado === false ? (
-                                    <span className="status-inactive">Rechazado</span>
+                                    <span className="status-inactive">Inactivo</span>
                                 ) : null}
                                 <div>
                                     {roleID !== 2 ? (
@@ -149,19 +169,22 @@ export default function AccumulatedServices() {
                                     <img src="" alt="Foto" />
                                 </div>
                                 <div className="btns">
-                                    <button className="btn_cancel">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-octagon" viewBox="0 0 16 16">
-                                            <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z" />
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                                        </svg>
-                                        <span>CANCELAR</span>
-                                    </button>
-                                    <button className="btn_accept">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check2" viewBox="0 0 16 16">
-                                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
-                                        </svg>
-                                        <span>FINALIZAR</span>
-                                    </button>
+                                    {element.estado === true ? (
+                                        <button className="btn_stop" onClick={() => Detener_Publicacion(element.id_servicio)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-stop-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5z" />
+                                            </svg>
+                                            <span>DETENER PUBLICACION</span>
+                                        </button>
+                                    ) : element.estado === false ? (
+                                        <button className="btn_play" onClick={() => Activar_Publicacion(element.id_servicio)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-play-fill" viewBox="0 0 16 16">
+                                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+                                            </svg>
+                                            <span>ACTIVAR PUBLICACION</span>
+                                        </button>
+                                    ) : null}
                                 </div>
                             </div>
                         </li>
@@ -169,7 +192,7 @@ export default function AccumulatedServices() {
                 </ul>
             ) : (
                 <div className="not_found">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-grimace-fill" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-emoji-grimace-fill" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M7 6.25C7 5.56 6.552 5 6 5s-1 .56-1 1.25.448 1.25 1 1.25 1-.56 1-1.25m3 1.25c.552 0 1-.56 1-1.25S10.552 5 10 5s-1 .56-1 1.25.448 1.25 1 1.25m1.5 4.5a1.5 1.5 0 0 0 1.48-1.25v-.003a1.5 1.5 0 0 0 0-.497A1.5 1.5 0 0 0 11.5 9h-7a1.5 1.5 0 0 0-1.48 1.25v.003a1.5 1.5 0 0 0 0 .497A1.5 1.5 0 0 0 4.5 12zm-7.969-1.25a1 1 0 0 0 .969.75h.25v-.75zm8.938 0a1 1 0 0 1-.969.75h-.25v-.75zM11.5 9.5a1 1 0 0 1 .969.75H11.25V9.5zm-7.969.75A1 1 0 0 1 4.5 9.5h.25v.75zM5.25 11.5h1v-.75h-1zm2.5 0h-1v-.75h1zm1.5 0h-1v-.75h1zm1.5 0h-1v-.75h1zm-1-2h1v.75h-1zm-1.5 0h1v.75h-1zm-1.5 0h1v.75h-1zm-1.5 0h1v.75h-1z" />
                     </svg>
                     <h1>!LO SENTIMOS¡, Pero no se encontraro ese servicio.</h1>

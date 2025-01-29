@@ -22,89 +22,43 @@ const useDebounce = (value, delay) => {
 };
 
 export default function FavoriteServices() {
-    const [solicitudes, setSolicitudes] = useState([]);
-    const [roleID, setroleID] = useState(0);
     const { removeItem, fetchAll, fetchOne } = AuthService();
     const [elements, setElements] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const { email, token } = useAuth();
-    const [showPopup, setShowPopup] = useState(false);
-    const [serviceToDelete, setServiceToDelete] = useState(null);
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     const deleteFavoriteService = async (favoriteId) => {
+        let favorites = await fetchAll("favoritos");
+        const favorito = favorites.find((favorite) => favorite.servicio_id === favoriteId);
+        const idFavorito = favorito.id_favorito;
+    
+        if (!idFavorito) {
+            console.error("No se encontró un favorito con el ID proporcionado:", favoriteId);
+            return;
+        }
+    
         try {
-            // Obtener los servicios y favoritos
-            const [servicesResponse, favoritesResponse] = await Promise.all([
-                fetch("https://api.fsalva157.dev/api/servicios/"),
-                fetch("https://api.fsalva157.dev/api/favoritos/"),
-            ]);
-
-            if (!servicesResponse.ok || !favoritesResponse.ok) {
-                console.error("Error en las peticiones.");
-                return;
+            await removeItem(`favoritos/${idFavorito}`, token);
+            if (email) {
+                await getUserIdByEmail(email);
             }
-
-            const services = await servicesResponse.json();
-            const favorites = await favoritesResponse.json();
-
-            // Encontrar el favorito a eliminar
-            const favorite = favorites.find(fav => fav.id_favorito === favoriteId);
-
-            if (!favorite) {
-                console.error("Favorito no encontrado.");
-                return;
-            }
-
-            // Verificar si el servicio relacionado está en la lista
-            const serviceToDelete = services.find(service => service.id_servicio === favorite.servicio_id);
-
-            if (!serviceToDelete) {
-                console.error("Servicio no encontrado.");
-                return;
-            }
-
-            // Realizar la solicitud DELETE
-            const deleteResponse = await fetch(`https://api.fsalva157.dev/api/favoritos/${favoriteId}`, {
-                method: 'DELETE',
-            });
-
-            if (!deleteResponse.ok) {
-                console.error("Error al eliminar el favorito.");
-                return;
-            }
-
-            console.log(`Favorito con ID ${favoriteId} eliminado exitosamente.`);
-
-            // Si necesitas actualizar la UI o el estado, puedes hacerlo aquí
-            setElements(prevElements => prevElements.filter(service => service.id_servicio !== favoriteId));
-
         } catch (error) {
-            console.error("Error al eliminar el favorito:", error);
+            console.error("Error al eliminar servicio favorito:", error.response ? error.response.data : error.message);
         }
     };
 
-
     const fetchUserServices = async (userId) => {
         try {
-            const [servicesResponse, favoritesResponse] = await Promise.all([
-                fetch("https://api.fsalva157.dev/api/servicios/"),
-                fetch("https://api.fsalva157.dev/api/favoritos/"),
-            ]);
+            let services = await fetchAll("servicios");
+            let favorites = await fetchAll("favoritos");
 
-            if (!servicesResponse.ok || !favoritesResponse.ok) {
-                console.error("Error en las peticiones.");
-                return;
-            }
-
-            const services = await servicesResponse.json();
-            const favorites = await favoritesResponse.json();
-            const favoriteServiceIds = favorites.map(fav => fav.servicio_id);
-            console.log("IDs de servicios favoritos:", favoriteServiceIds);
-            const favoriteServices = services.filter(service => favoriteServiceIds.includes(service.id_servicio));
-            setElements(favoriteServices);
-
+            const favoritos = favorites.filter((favorite) => favorite.usuario_id === userId);
+            const servicios = services.filter((service) =>
+                favoritos.some((favorite) => favorite.servicio_id === service.id_servicio)
+            );
+            setElements(servicios);
         } catch (error) {
             console.error("Error al obtener los servicios favoritos:", error);
         }
@@ -113,33 +67,11 @@ export default function FavoriteServices() {
 
     const getUserIdByEmail = async (email) => {
         try {
-            const { role_id } = await fetchOne(`usuario/getByEmail/${email}`);
-            setroleID(role_id);
             const { id_usuario } = await fetchOne(`usuario/getByEmail/${email}`);
             fetchUserServices(id_usuario);
         } catch (error) {
             console.error("Error obteniendo ID de usuario:", error);
         }
-    };
-
-    const confirmDelete = (serviceId) => {
-        setShowPopup(true);
-        setServiceToDelete(serviceId);
-    };
-
-    const handleConfirmDelete = async () => {
-        if (serviceToDelete) {
-            await deleteFavoriteService(serviceToDelete);
-            setShowPopup(false);
-            setServiceToDelete(null);
-            fetchUserServices(id_usuario);
-        }
-    };
-
-
-    const handleCancelDelete = () => {
-        setShowPopup(false);
-        setServiceToDelete(null);
     };
 
     useEffect(() => {
@@ -179,7 +111,7 @@ export default function FavoriteServices() {
                                 <h2>{element.titulo}</h2>
                                 <span>{element.descripcion}</span>
                                 <div>
-                                    <button onClick={() => confirmDelete(element.id_servicio)}>
+                                    <button onClick={() => deleteFavoriteService(element.id_servicio)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -209,16 +141,6 @@ export default function FavoriteServices() {
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M7 6.25C7 5.56 6.552 5 6 5s-1 .56-1 1.25.448 1.25 1 1.25 1-.56 1-1.25m3 1.25c.552 0 1-.56 1-1.25S10.552 5 10 5s-1 .56-1 1.25.448 1.25 1 1.25m1.5 4.5a1.5 1.5 0 0 0 1.48-1.25v-.003a1.5 1.5 0 0 0 0-.497A1.5 1.5 0 0 0 11.5 9h-7a1.5 1.5 0 0 0-1.48 1.25v.003a1.5 1.5 0 0 0 0 .497A1.5 1.5 0 0 0 4.5 12zm-7.969-1.25a1 1 0 0 0 .969.75h.25v-.75zm8.938 0a1 1 0 0 1-.969.75h-.25v-.75zM11.5 9.5a1 1 0 0 1 .969.75H11.25V9.5zm-7.969.75A1 1 0 0 1 4.5 9.5h.25v.75zM5.25 11.5h1v-.75h-1zm2.5 0h-1v-.75h1zm1.5 0h-1v-.75h1zm1.5 0h-1v-.75h1zm-1-2h1v.75h-1zm-1.5 0h1v.75h-1zm-1.5 0h1v.75h-1zm-1.5 0h1v.75h-1z" />
                     </svg>
                     <h1>!LO SENTIMOS¡, Pero no se encontraro ese servicio.</h1>
-                </div>
-            )}
-
-            {showPopup && (
-                <div className="popup-overlay">
-                    <div className="popup-content">
-                        <p>¿Estás seguro de que deseas eliminar este servicio?</p>
-                        <button onClick={handleConfirmDelete}>Sí</button>
-                        <button onClick={handleCancelDelete}>No</button>
-                    </div>
                 </div>
             )}
 

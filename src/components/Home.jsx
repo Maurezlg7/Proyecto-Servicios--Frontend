@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/home.css";
 
 export default function Home() {
+    const Navigate = useNavigate();
     const { email } = useAuth();
-    const [formData, setformData] = useState({
-        usuario_id: "",
-        servicio_id: ""
-    });
     const { fetchAll, submitForm, fetchOne } = AuthService();
     const [favorites, setFavorites] = useState({});
     const [elements, setElements] = useState([]);
@@ -21,10 +18,13 @@ export default function Home() {
 
 
     const favoriteService = async (id_service) => {
+        if(!email){
+            Navigate('/login');
+        }
+
         try {
             const response = await fetchOne(`usuario/getByEmail/${email}`);
             const id_usuario = response.id_usuario
-            console.log(id_usuario);
             if (!id_usuario) throw new Error("No se pudo obtener el ID del usuario.");
 
             const payload = {
@@ -33,7 +33,6 @@ export default function Home() {
             };
 
             await submitForm("favoritos", payload);
-            console.log("Servicio favorito actualizado correctamente:", payload);
         } catch (error) {
             console.error("Error al agregar/quitar favorito:", error);
         }
@@ -41,7 +40,7 @@ export default function Home() {
 
     useEffect(() => {
         callingServices();
-    }, []);
+    });
 
     const toggleFavorite = (id) => {
         setFavorites((prev) => ({

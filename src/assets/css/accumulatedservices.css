@@ -88,12 +88,6 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.service .status-active{
-  color: rgb(132, 192, 41);
-  font-size: 25px;
-  font-weight: bolder;
-}
-
 .service h2{
   font-size: 30px;
   margin: 5px 0;
@@ -119,6 +113,10 @@
   border-radius: 10px;
   transition:  background-color 0.5s ease;
   margin: 7px 5px;
+}
+
+.service button:hover{
+  background-color: #8a4ded;
 }
 
 .service button svg{
@@ -182,10 +180,24 @@
 
 .btn_cancel{
   background-color: #ff4d4f;
+  transition: background-color 0.5s ease;
+}
+
+.btn_cancel:hover{
+  background-color: #e00004;
+}
+
+.btn_cancel svg{
+  color: white;
 }
 
 .btn_accept{
   background-color: #4caf50;
+  transition: background-color 0.5s ease;
+}
+
+.btn_accept:hover{
+  background-color: #008f05;
 }
 
 .popup-overlay {
@@ -209,6 +221,10 @@
   text-align: center;
   max-width: 400px;
   width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .popup-content button {
   margin: 10px;
@@ -246,6 +262,109 @@
 }
 .not_found h1 {
   font-size: 50px;
+}
+.state{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: bolder;
+  font-size: 25px;
+}
+.state_earring{
+  color: goldenrod;
+}
+
+.state_accepted{
+  color: green;
+}
+
+.state_refused{
+  color: red;
+}
+
+.btn_stop{
+  background-color: goldenrod;
+  transition: background-color 0.5s ease;
+  padding: 5px;
+}
+
+.btn_stop:hover{
+  background-color: rgb(173, 131, 23);
+}
+
+.status-active{
+  color: green;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.status-inactive{
+  color: red;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.btn_play{
+  background-color: blue;
+  transition: background-color 0.5s ease;
+  padding: 5px;
+}
+
+.btn_play:hover{
+  background-color: rgb(0, 0, 163);
+}
+
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 5px 0;
+}
+
+.rating .star {
+  font-size: 3rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.rating .star.active {
+  color: #3300ff;
+}
+
+
+.rating input {
+  display: none;
+  margin: 5px 0;
+}
+.rating label {
+  font-size: 3rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+}
+
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
+  color: #3300ff;
+}
+
+.btn_rating{
+  display: flex;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_rating button{
+  background-color: gray !important;
+  color: white !important;
 }
 
 /*# sourceMappingURL=accumulatedservices.css.map */

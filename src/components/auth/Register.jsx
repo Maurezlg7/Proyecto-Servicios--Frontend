@@ -5,7 +5,6 @@ import '../../assets/css/register.css';
 import AuthService from "../../services/AuthService";
 
 function Register() {
-    const API_BASE_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const { fetchOne, submitForm } = AuthService();
@@ -63,7 +62,7 @@ function Register() {
     return (
         <div className="body_register">
             <div className="Logo">
-                <img src="/src/assets/images/comunidad.jpg" alt="Logo" />
+                <img src="/public/Logo_LasFlores.png" alt="Logo" />
             </div>
             <form onSubmit={handleSubmit}>
                 <h1>REGISTRO</h1>
@@ -127,7 +126,7 @@ function Register() {
                     required
                 />
 
-                <label htmlFor="rol_id">Rol:</label>
+                <label htmlFor="rol_id" className="rol_id">Rol:</label>
                 <select
                     name="role_id"
                     value={formData.role_id}

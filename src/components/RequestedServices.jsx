@@ -21,17 +21,22 @@ const useDebounce = (value, delay) => {
     return debouncedValue;
 };
 
-export default function AccumulatedServices() {
-    const [roleID, setroleID] = useState(0);
-    const { fetchAll, fetchOne, modifyItem } = AuthService();
+export default function RequestedServices() {
+    const { fetchAll, fetchOne, modifyItem, submitForm } = AuthService();
     const [elements, setElements] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const { email } = useAuth();
-    const [showPopup, setShowPopup] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
     const [popupDelete, setPopupDelete] = useState(false);
+    const [popupStar, setpopupStar] = useState(false);
     const [motivo, setMotivo] = useState("");
-    const [voto, setVoto] = useState(null);
+    const [calificacion, setCalificacion] = useState("");
+    const [tipoMotivo, setTipoMotivo] = useState("1");
+    const [rating, setRating] = useState(null);
+    const [hoverRating, setHoverRating] = useState(null);
+    const [idSolicitudSeleccionada, setIdSolicitudSeleccionada] = useState(null);
+    const [idOferente, setIdOferente] = useState(null);
+    const [voto, setVoto] = useState("");
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -51,23 +56,23 @@ export default function AccumulatedServices() {
             const votos = await fetchAll("votos");
             const voto = votos.find(voto => voto.solicitud_id === idSolicitud);
             if (voto) {
-                setVoto(voto.comentario);
-                return { calificar: true, comentario: voto.comentario };
+                setVoto(voto.voto);
+                return { calificar: true, voto: voto.voto };
             } else {
                 setVoto(null);
-                return { calificar: false, comentario: null };
+                return { calificar: false, voto: null };
             }
         } catch (error) {
             console.error("Error obteniendo votos:", error);
-            return { calificar: false, comentario: null };
+            return { calificar: false, voto: null };
         }
     };
-
+    
     const fetchUserServices = async (userId) => {
         try {
-            const requests = await fetchAll("solicitudes");
-            const services = await fetchAll("servicios");
-            const solicitudes = requests.filter((request) => request.oferente_id === userId);
+            const requests = await fetchAll("solicitudes") || [];
+            const services = await fetchAll("servicios") || [];
+            const solicitudes = requests.filter((request) => request.buscador_id === userId);
             const servicioIds = solicitudes.map(request => request.servicio_id);
 
             const serviciosFiltrados = servicioIds.map(servicioId =>
@@ -76,8 +81,8 @@ export default function AccumulatedServices() {
 
             const serviciosConSolicitudes = await Promise.all(solicitudes.map(async (request) => {
                 const servicio = serviciosFiltrados.find(service => service.id_servicio === request.servicio_id);
-                const fullName = await BuscadorID(request.buscador_id);
-                const { calificar, comentario } = await ComprobarCalificacion(request.id_solicitud);
+                const fullName = await BuscadorID(request.oferente_id);
+                const { calificar, voto } = await ComprobarCalificacion(request.id_solicitud);
                 return {
                     id_servicio: servicio.id_servicio,
                     id_solicitud: request.id_solicitud,
@@ -85,11 +90,12 @@ export default function AccumulatedServices() {
                     estado_final: request.estado_final,
                     motivo_cierre: request.motivo_cierre,
                     buscador: fullName,
+                    oferente_id: request.oferente_id,
                     comentario: request.comentario,
                     titulo: servicio.titulo,
                     descripcion: servicio.descripcion,
                     calificar,
-                    comentarioCalificacion: comentario,
+                    voto,
                 };
             }));
 
@@ -99,17 +105,9 @@ export default function AccumulatedServices() {
             console.error("Error obteniendo servicios:", error);
         }
     };
-
-    useEffect(() => {
-        if (!voto) {
-          console.error("Voto no proporcionado");
-        }
-      }, [voto]);
-      
+    
     const getUserIdByEmail = async (email) => {
         try {
-            const { role_id } = await fetchOne(`usuario/getByEmail/${email}`);
-            setroleID(role_id);
             const { id_usuario } = await fetchOne(`usuario/getByEmail/${email}`);
             fetchUserServices(id_usuario);
         } catch (error) {
@@ -117,68 +115,109 @@ export default function AccumulatedServices() {
         }
     };
 
-    const confirmDelete = (id) => {
-        setShowPopup(true);
-        setServiceToDelete(id);
-    };
-
     const Rechazar = (id_solicitud) => {
         setServiceToDelete(id_solicitud);
         setPopupDelete(true);
     };
 
-    const handleMotivoChange = (e) => {
-        setMotivo(e.target.value);
-    };
-
-    const CambiarEstado = async (id_solicitud, estado, motivo) => {
-        let data;
-        if (estado === "aceptado") {
-            data = {
-                "estado_id": 2,
-                "motivo_cierre": motivo || "Aceptado con sus condiciones y terminos.",
-                "estado_final": "finalizado"
-            };
-        } else if (estado === "rechazado") {
-            data = {
-                "estado_id": 3,
-                "motivo_cierre": motivo,
-                "estado_final": "cancelado"
-            };
+    const handleSubmitCalificacion = async () => {
+        if (!rating || !calificacion.trim()) {
+            alert("Por favor, selecciona una calificación y escribe un comentario antes de enviar.");
+            return;
         }
-
+    
+        const data = {
+            solicitud_id: idSolicitudSeleccionada,
+            voto: rating,
+            comentario: calificacion,
+            oferente_id: idOferente,
+        };
+    
         try {
-            await modifyItem("solicitudes/", id_solicitud, data);
-            setElements((prev) =>
-                prev.map((element) =>
-                    element.id_solicitud === id_solicitud
-                        ? { ...element, estado_id: data.estado_id }
+            await submitForm("votos", data);
+            setElements(prevElements => 
+                prevElements.map(element => 
+                    element.id_solicitud === idSolicitudSeleccionada
+                        ? { ...element, calificar: true, voto: rating }
                         : element
                 )
             );
         } catch (error) {
             console.error("Error: " + error);
         }
+    
+        setpopupStar(false);
+        setRating(null);
+        setHoverRating(null);
+        setCalificacion("");
     };
 
-
-
-    const handleConfirmDelete = () => {
-        AuthService.removeItem(serviceToDelete).then(() => {
-            setShowPopup(false);
-            fetchUserServices();
-        });
+    const handleMotivoChange = (e) => {
+        setMotivo(e.target.value);
     };
 
-    const handleCancelDelete = () => {
-        setShowPopup(false);
+    const handleTipoMotivoChange = (e) => {
+        setTipoMotivo(e.target.value);
+    };
+
+    const handleCalificacionChange = (e) => {
+        setCalificacion(e.target.value);
+    };
+
+    const handleRatingClick = (value) => {
+        setRating(value);
+    };
+
+    const handleMouseEnter = (value) => {
+        setHoverRating(value);
+    };
+
+    const handleMouseLeave = () => {
+        setHoverRating(null);
+    };
+
+    const CambiarEstado = async (id_solicitud, motivo, tipoMotivo) => {
+        let data = {
+            "estado_id": 3,
+            "motivo_cierre": motivo,
+            "rechazo_motivo_id": parseInt(tipoMotivo),
+            "estado_final": "cancelado"
+        };
+
+        try {
+            await modifyItem("solicitudes/", id_solicitud, data);
+            const updatedRequest = await fetchOne(`solicitudes/${id_solicitud}`);
+
+            setElements((prev) =>
+                prev.map((element) =>
+                    element.id_solicitud === id_solicitud
+                        ? {
+                            ...element,
+                            estado_id: updatedRequest.estado_id,
+                            motivo_cierre: updatedRequest.motivo_cierre,
+                            estado_final: updatedRequest.estado_final
+                        }
+                        : element
+                )
+            );
+
+        } catch (error) {
+            console.error("Error: " + error);
+        }
     };
 
     useEffect(() => {
         if (email) {
             getUserIdByEmail(email);
         }
-    });
+    }, [email]);
+
+    useEffect(() => {
+        if (!voto) {
+          console.error("Voto no proporcionado");
+        }
+      }, [voto]);
+      
 
     const filteredElements = elements.filter((element) =>
         element.titulo.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -220,22 +259,6 @@ export default function AccumulatedServices() {
                                     <span className="state state_refused">{'rechazado'.toUpperCase()}</span>
                                 ) : null}
                                 <div>
-                                    {roleID !== 2 ? (
-                                        <button>
-                                            <Link to={`/edit_service/${element.id_servicio}`}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
-                                                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                                                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
-                                                </svg>
-                                            </Link>
-                                        </button>
-                                    ) : null}
-                                    <button onClick={() => confirmDelete(element.id_servicio)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                        </svg>
-                                    </button>
                                     <button>
                                         <Link to={`/view_product/${element.id_servicio}`}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
@@ -251,31 +274,34 @@ export default function AccumulatedServices() {
                                     <img src="*" alt="Foto" />
                                 </div>
                                 <div className="btns">
-                                    {element.calificar ? (
-                                        <span>{element.comentarioCalificacion}</span>
-                                    ) : !element.calificar ? (
+                                    {element.estado_final === "finalizado" || element.estado_final === "cancelado" ? (
                                         <>
-                                            {element.estado_final === "finalizado" || element.estado_final === "cancelado" ? (
-                                                <p>{element.motivo_cierre}</p>
+                                            {element.calificar ? (
+                                                <span>VOTO: {element.voto}/5</span>
                                             ) : (
-                                                <>
-                                                    <button className="btn_cancel" onClick={() => Rechazar(element.id_solicitud)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-octagon" viewBox="0 0 16 16">
-                                                            <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z" />
-                                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                                                        </svg>
-                                                        <span>RECHAZAR</span>
-                                                    </button>
-                                                    <button className="btn_accept" onClick={() => CambiarEstado(element.id_solicitud, "aceptado", null)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check2" viewBox="0 0 16 16">
-                                                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
-                                                        </svg>
-                                                        <span>ACEPTAR</span>
-                                                    </button>
-                                                </>
+                                                <button className="btn_play" onClick={() => {
+                                                    setpopupStar(true);
+                                                    setIdOferente(element.oferente_id);
+                                                    setIdSolicitudSeleccionada(element.id_solicitud);
+                                                }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-star-half" viewBox="0 0 16 16">
+                                                        <path d="M5.354 5.119 7.538.792A.52.52 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.54.54 0 0 1 16 6.32a.55.55 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.5.5 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.6.6 0 0 1 .085-.302.51.51 0 0 1 .37-.245zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.56.56 0 0 1 .162-.505l2.907-2.77-4.052-.576a.53.53 0 0 1-.393-.288L8.001 2.223 8 2.226z" />
+                                                    </svg>
+                                                    <span>CALIFICAR</span>
+                                                </button>
                                             )}
                                         </>
-                                    ) : null}
+                                    ) : (
+                                        <>
+                                            <button className="btn_cancel" onClick={() => Rechazar(element.id_solicitud)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-octagon" viewBox="0 0 16 16">
+                                                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z" />
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                                </svg>
+                                                <span>CANCELAR</span>
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </li>
@@ -289,21 +315,46 @@ export default function AccumulatedServices() {
                     <h1>!LO SENTIMOS¡, Pero no se encontraro ese servicio.</h1>
                 </div>
             )}
-
-            {showPopup && (
+            {popupStar && (
                 <div className="popup-overlay">
                     <div className="popup-content">
-                        <p>¿Estás seguro de que deseas eliminar este servicio?</p>
-                        <button onClick={handleConfirmDelete}>Sí</button>
-                        <button onClick={handleCancelDelete}>No</button>
+                        <p>¿Que te parecio el servicio del usuario?</p>
+                        <div className="rating">
+                            {[5, 4, 3, 2, 1].map((value) => (
+                                <label
+                                    key={value}
+                                    className={`star ${value <= (hoverRating || rating) ? "active" : ""}`}
+                                    onMouseEnter={() => handleMouseEnter(value)}
+                                    onMouseLeave={handleMouseLeave}
+                                    onClick={() => handleRatingClick(value)}
+                                >
+                                    ★
+                                </label>
+                            ))}
+                        </div>
+                        <textarea
+                            value={calificacion}
+                            onChange={handleCalificacionChange}
+                            placeholder="Explica el motivo"
+                        />
+                        <div className="btn_rating">
+                            <button onClick={handleSubmitCalificacion}>ENVIAR</button>
+                            <button onClick={() => setpopupStar(false)}>CANCELAR</button>
+                        </div>
                     </div>
                 </div>
             )}
-
             {popupDelete && (
                 <div className="popup-overlay">
                     <div className="popup-content">
-                        <p>¿Estás seguro de que deseas rechazar este servicio?</p>
+                        <p>¿Estás seguro de que deseas cancelar este servicio?</p>
+                        <label htmlFor="">Tipo de motivo</label>
+                        <select name="tipoMotivo" id="tipoMotivo" value={tipoMotivo} onChange={handleTipoMotivoChange}>
+                            <option value="1">Distancia</option>
+                            <option value="2">Precio</option>
+                            <option value="3">Tiempo</option>
+                            <option value="4">Otro</option>
+                        </select>
                         <textarea
                             value={motivo}
                             onChange={handleMotivoChange}
@@ -311,9 +362,10 @@ export default function AccumulatedServices() {
                         />
                         <button onClick={() => {
                             if (motivo) {
-                                CambiarEstado(serviceToDelete, "rechazado", motivo);
+                                CambiarEstado(serviceToDelete, motivo, tipoMotivo);
                                 setPopupDelete(false);
                                 setMotivo("");
+                                setTipoMotivo("1");
                             } else {
                                 alert("Debe colocar algún motivo.");
                             }

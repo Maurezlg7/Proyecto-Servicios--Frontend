@@ -43,6 +43,7 @@ export default function EditService() {
                 }
                 setLoading(false);
             } catch (error) {
+                console.error("Error: " + error);
                 setError("No se pudo cargar el servicio. Por favor, inténtalo más tarde.");
                 setLoading(false);
             }
@@ -69,6 +70,7 @@ export default function EditService() {
             await modifyItem("servicios/", id, filteredData);
             navigate("/acumulated_services");
         } catch (error) {
+            console.error("Error: " + error);
             setError("Hubo un problema al modificar el servicio. Intenta de nuevo.");
         }
     };

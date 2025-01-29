@@ -82,36 +82,6 @@
 
 }
 
-.Description .rating{
-  display: flex;
-  flex-direction: row-reverse !important;
-  justify-content: center;
-  width: 50% !important;
-  height: 30px !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  margin: 25px 0 !important;	
-}
-
-.Description .rating input {
-  display: none;
-}
-
-.Description .rating label {
-  font-size: 3rem;
-  color: #ccc;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-
-}
-
-.Description .rating input:checked ~ label,
-.Description .rating label:hover,
-.Description .rating label:hover ~ label {
-  color: #3300ff;
-}
-
 .popup-content_view{
   width: 400px;
   height: 500px;
@@ -148,9 +118,4 @@ textarea {
   resize: none;
 }
 
-.btn_send{
-  width: 150px;
-  height: 40px;
-  background-color: rgb(53, 56, 233);
-}
 /*# sourceMappingURL=viewProduct.css.map */
