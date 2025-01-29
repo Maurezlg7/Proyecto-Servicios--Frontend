@@ -1,9 +1,8 @@
 ## Descripción del Proyecto
 Este proyecto incluye modificaciones y mejoras en la lógica de la aplicación, trabajandose en las siguientes secciones:
-- **Home**: Se visualizan las actualizaciones de favoritos.
-- **FavoriteServices**:Se redefinió la estructura en cuanto a eliminación y calificació en favoritos..
-- **AuthService**: Se modificó la función removeItem para un mejor uso de su endpoints.
--
+- **RequestedService**: Manejo de peticiones del buscador.
+- **SercieRequests**: Manejo de peticiones del oferente.
+- **Navbar**: Dependiendo del rol del usuario se deberia tener a acceso a ciertas pantallas.
 
 ### Estructura de Archivos
 
@@ -11,11 +10,15 @@ Este proyecto incluye modificaciones y mejoras en la lógica de la aplicación, 
 Incluye los componentes JSX desarrollados y modificados:
 
 components/
-├── Home.jsx
-├── FavoriteServices.jsx
-├── AuthService.jsx
+├── RequestedService.jsx
+├── SercieRequests.jsx
+├── Navbar.jsx
 
 
 
 ### Créditos
-- **Claudia Chavarría** : Responsable de la modificación de archivos mencionados.
+- **Mauro L. Gomez** : Responsable de la modificación de archivos mencionados.
+
+### Aclaracion
+
+- **Se crearon ciertos archivos como el de profile para edicion de perfil y ver las calificaciones del oferente a futuro**
