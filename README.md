@@ -1,32 +1,21 @@
 ## Descripción del Proyecto
-Este proyecto incluye modificaciones y mejoras en el diseño web de las siguientes secciones:
-- **Navbar**: Creamos un nuevo ícono de Favoritos.
-- **SearchProduct**: Cambios en el diseño (visualización del servicio dentro de la categoría seleccionada).
-- **FavoriteServives**: Página para guadar los servicios de interés visualizarlos o eliminarlos.
-- **Inicio - Home**: Modificamos botones y sus funcionalidades.
+Este proyecto incluye modificaciones y mejoras en la lógica de la aplicación, trabajandose en las siguientes secciones:
+- **Home**: Se visualizan las actualizaciones de favoritos.
+- **FavoriteServices**:Se redefinió la estructura en cuanto a eliminación y calificació en favoritos..
+- **AuthService**: Se modificó la función removeItem para un mejor uso de su endpoints.
+-
 
 ### Estructura de Archivos
-
-#### assets/
-Contiene los estilos CSS específicos para cada componente del proyecto:
-
-assets/
-├── css/
-│   ├── Navbar.css
-│   ├── FavoriteServices.css
-│   ├── searchProduct.css
-│   ├── Home.css
-
 
 #### components/
 Incluye los componentes JSX desarrollados y modificados:
 
 components/
 ├── Home.jsx
-├── Router.jsx
-├── Navbar.jsx
+├── FavoriteServices.jsx
+├── AuthService.jsx
 
 
 
 ### Créditos
-- **Ana Gomez** : Responsable de la modificación de archivos css mencionados y de archivos JSX mencionados.
+- **Claudia Chavarría** : Responsable de la modificación de archivos mencionados.
