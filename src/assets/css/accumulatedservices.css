@@ -367,4 +367,26 @@
   color: white !important;
 }
 
-/*# sourceMappingURL=accumulatedservices.css.map */
+.perfil_oferente{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ac82ee;
+  color: white;
+}
+
+.perfil_oferente svg{
+  width: 20px;
+  height: 20px;
+}
+
+.user_oferente{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+}

@@ -3,11 +3,9 @@ import NavbarLayout from '../layouts/NavbarLayout';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
-import Profile from '../components/Profile';
 import ProtectedRoute from './ProtectedRoutes';
 import BuscarServiciosPage from '../pages/BuscarServiciosPage';
 import OptionsServicesPage from '../pages/optionsServicesPage';
-import MessagingHistoryPage from '../pages/messasingHistoryPage';
 import AcumulatedServicesPage from '../pages/AcumulatedServicesPage';
 import CreateService from '../components/CreateService';
 import ServiceRequestsPage from '../pages/ServiceRequestsPage';
@@ -15,6 +13,7 @@ import ViewProductPage from '../pages/ViewProductPage';
 import EditServicePage from '../pages/EditServicePage';
 import FavoriteServicesPage from '../pages/FavoriteServicesPage';
 import RequestedServicesPage from '../pages/RequestedServicesPage';
+import OfferorProfilePage from '../pages/ OfferorProfilePage';
 
 const router = createBrowserRouter([
     {
@@ -24,14 +23,6 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <HomePage />,
-            },
-            {
-                path: "profile",
-                element: (
-                    <ProtectedRoute>
-                        <Profile />
-                    </ProtectedRoute>
-                ),
             },
             {
                 path: "search_products",
@@ -50,14 +41,6 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <RequestedServicesPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "messaging_history",
-                element: (
-                    <ProtectedRoute>
-                        <MessagingHistoryPage />    
                     </ProtectedRoute>
                 ),
             },
@@ -98,9 +81,18 @@ const router = createBrowserRouter([
                 ),
             },
             {
+                path: "perfil_oferente/:id",
+                element: (
+                    <ProtectedRoute>
+                        <OfferorProfilePage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
                 path: "view_product/:id",
                 element: <ViewProductPage />
             },
+            
         ],
     },
     {

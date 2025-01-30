@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/accumulatedservices.css";
-import "../assets/css/ratingSystem.css";
 
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -36,7 +35,7 @@ export default function AccumulatedServices() {
         try {
             const data = await fetchAll("servicios/");
             const filteredServices = data.filter((service) => service.usuario_id === userId);
-            setElements(filteredServices);
+            setElements(filteredServices.reverse());
         } catch (error) {
             console.error("Error obteniendo servicios:", error);
         }

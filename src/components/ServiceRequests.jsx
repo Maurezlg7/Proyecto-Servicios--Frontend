@@ -93,7 +93,7 @@ export default function AccumulatedServices() {
                 };
             }));
 
-            setElements(serviciosConSolicitudes);
+            setElements(serviciosConSolicitudes.reverse());
 
         } catch (error) {
             console.error("Error obteniendo servicios:", error);

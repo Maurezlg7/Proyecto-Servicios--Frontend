@@ -12,19 +12,38 @@ export default function Home() {
     const [elements, setElements] = useState([]);
 
     const callingServices = async () => {
-        const response = await fetchAll("servicios");
-        setElements(response);
+        const servicesResponse = await fetchAll("servicios");
+        const votesResponse = await fetchAll("votos");
+
+        const votesByService = votesResponse.reduce((acc, vote) => {
+            const servicioId = vote.solicitud.servicio_id;
+            if (!acc[servicioId]) {
+                acc[servicioId] = 0;
+            }
+            acc[servicioId] += vote.voto;
+            return acc;
+        }, {});
+
+        const servicesWithVotes = servicesResponse.map(service => {
+            return {
+                ...service,
+                totalVotes: votesByService[service.id_servicio] || 0,
+            };
+        });
+
+        servicesWithVotes.sort((a, b) => b.totalVotes - a.totalVotes);
+
+        setElements(servicesWithVotes);
     };
 
-
     const favoriteService = async (id_service) => {
-        if(!email){
+        if (!email) {
             Navigate('/login');
         }
 
         try {
             const response = await fetchOne(`usuario/getByEmail/${email}`);
-            const id_usuario = response.id_usuario
+            const id_usuario = response.id_usuario;
             if (!id_usuario) throw new Error("No se pudo obtener el ID del usuario.");
 
             const payload = {
@@ -40,7 +59,7 @@ export default function Home() {
 
     useEffect(() => {
         callingServices();
-    });
+    }, []);
 
     const toggleFavorite = (id) => {
         setFavorites((prev) => ({
@@ -75,6 +94,7 @@ export default function Home() {
                                         <div className="data-info">
                                             <span>{element.titulo}</span>
                                             <p>{element.horario}</p>
+                                            <p>Votos: {element.totalVotes}</p>
                                         </div>
                                     </div>
                                     <div>
@@ -135,4 +155,3 @@ export default function Home() {
         </>
     );
 }
-

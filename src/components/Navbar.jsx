@@ -20,12 +20,12 @@ function Navbar() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-
+    
             if (response.status === 201) {
-                setTimeout(() => logout(), 100);
+                await logout();
                 navigate("/");
-            }
-            else {
+                window.location.reload();
+            } else {
                 console.error("Error al desloguearse del servidor:", response.statusText);
             }
         } catch (error) {

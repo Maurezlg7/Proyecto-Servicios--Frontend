@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/accumulatedservices.css";
-import "../assets/css/ratingSystem.css";
 
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -67,7 +66,7 @@ export default function RequestedServices() {
             return { calificar: false, voto: null };
         }
     };
-    
+
     const fetchUserServices = async (userId) => {
         try {
             const requests = await fetchAll("solicitudes") || [];
@@ -99,13 +98,13 @@ export default function RequestedServices() {
                 };
             }));
 
-            setElements(serviciosConSolicitudes);
+            setElements(serviciosConSolicitudes.reverse());
 
         } catch (error) {
             console.error("Error obteniendo servicios:", error);
         }
     };
-    
+
     const getUserIdByEmail = async (email) => {
         try {
             const { id_usuario } = await fetchOne(`usuario/getByEmail/${email}`);
@@ -125,18 +124,18 @@ export default function RequestedServices() {
             alert("Por favor, selecciona una calificación y escribe un comentario antes de enviar.");
             return;
         }
-    
+
         const data = {
             solicitud_id: idSolicitudSeleccionada,
             voto: rating,
             comentario: calificacion,
             oferente_id: idOferente,
         };
-    
+
         try {
             await submitForm("votos", data);
-            setElements(prevElements => 
-                prevElements.map(element => 
+            setElements(prevElements =>
+                prevElements.map(element =>
                     element.id_solicitud === idSolicitudSeleccionada
                         ? { ...element, calificar: true, voto: rating }
                         : element
@@ -145,7 +144,7 @@ export default function RequestedServices() {
         } catch (error) {
             console.error("Error: " + error);
         }
-    
+
         setpopupStar(false);
         setRating(null);
         setHoverRating(null);
@@ -214,10 +213,10 @@ export default function RequestedServices() {
 
     useEffect(() => {
         if (!voto) {
-          console.error("Voto no proporcionado");
+            console.error("Voto no proporcionado");
         }
-      }, [voto]);
-      
+    }, [voto]);
+
 
     const filteredElements = elements.filter((element) =>
         element.titulo.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -249,7 +248,14 @@ export default function RequestedServices() {
                             <div className="service">
                                 <h2>{element.titulo}</h2>
                                 <span>{element.descripcion}</span>
-                                <span><b>{element.buscador.toUpperCase()}</b></span>
+                                <span className="user_oferente">
+                                    <b>{element.buscador.toUpperCase()}</b>
+                                    <Link to={`/perfil_oferente/${element.oferente_id}`} className="perfil_oferente">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+                                        </svg>
+                                    </Link>
+                                </span>
                                 <span>{element.comentario}</span>
                                 {element.estado_id === 1 ? (
                                     <span className="state state_earring">{'pendiente'.toUpperCase()}</span>

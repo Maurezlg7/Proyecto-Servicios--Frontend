@@ -1,9 +1,7 @@
 ## Descripción del Proyecto
 Este proyecto incluye modificaciones y mejoras en la lógica de la aplicación, trabajandose en las siguientes secciones:
-- **Home**: Se visualizan las actualizaciones de favoritos.
-- **FavoriteServices**:Se redefinió la estructura en cuanto a eliminación y calificació en favoritos..
-- **AuthService**: Se modificó la función removeItem para un mejor uso de su endpoints.
--
+- **OFFERORPROFILE**: Se visualizan los comentarios echos por el oferente y se implemento su diseño.
+- **HOME**: Se modifico para que se vean primero los servicios con mas votaciones.
 
 ### Estructura de Archivos
 
@@ -11,11 +9,10 @@ Este proyecto incluye modificaciones y mejoras en la lógica de la aplicación, 
 Incluye los componentes JSX desarrollados y modificados:
 
 components/
+├── OfferProfile.jsx
 ├── Home.jsx
-├── FavoriteServices.jsx
-├── AuthService.jsx
 
 
 
 ### Créditos
-- **Claudia Chavarría** : Responsable de la modificación de archivos mencionados.
+- **Mauro Gomez** : Responsable de la modificación de archivos mencionados.
