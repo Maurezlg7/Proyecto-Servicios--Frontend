@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/accumulatedservices.css";
-import "../assets/css/ratingSystem.css";
 
 const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
